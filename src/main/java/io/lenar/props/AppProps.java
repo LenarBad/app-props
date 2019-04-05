@@ -1,4 +1,6 @@
-package io.lenar.props.file;
+package io.lenar.props;
+
+import io.lenar.props.file.PropFile;
 
 import java.util.Properties;
 
