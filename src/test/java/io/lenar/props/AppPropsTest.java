@@ -1,6 +1,6 @@
-package io.lenar.props.test;
+package io.lenar.props;
 
-import io.lenar.props.file.AppProps;
+import io.lenar.props.AppProps;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
