@@ -13,15 +13,21 @@ public class AppPropsTest {
     }
 
     @Test
-    public void shouldReturnNullForNonExistingProperty() {
+    public void shouldReturnNullForNonExistingPropertyTest() {
         AppProps appProps = new AppProps();
         assertNull(appProps.value("nonexistingprop"));
     }
 
     @Test
-    public void shouldApplyDefaultIfUsedForNonExistingProperty() {
+    public void shouldApplyDefaultIfUsedForNonExistingPropertyTest() {
         AppProps appProps = new AppProps();
         assertEquals("default value", appProps.value("nonexistingprop", "default value"));
+    }
+
+    @Test
+    public void envVariablesTest() {
+        AppProps appProp = new AppProps();
+        assertEquals(System.getProperty("user.home"), appProp.value("user.home"));
     }
 
 }
