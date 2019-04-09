@@ -6,18 +6,20 @@ import java.util.Properties;
 
 public class AppProps {
 
+    private static final String DEFAULT_FILE_NAME = "app-props.properties";
+
     private PropFile file;
 
     private Properties properties;
 
+    public AppProps() {
+        this(DEFAULT_FILE_NAME);
+    }
+
     public AppProps(String fileName) {
         this.file = new PropFile(fileName);
         this.properties = this.file.properties();
-    }
-
-    public AppProps() {
-        this.file = new PropFile();
-        this.properties = this.file.properties();
+        properties.putAll(System.getProperties());
     }
 
     public String value(String key) {

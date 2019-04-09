@@ -11,7 +11,7 @@ public class PropFile {
 
     private static final Logger log = LoggerFactory.getLogger(PropFile.class);
 
-    private static final String DEFAULT_FILE_NAME = "app-props.properties";
+
     private static final String DEFAULT_DIR = System.getProperty("user.home");
 
     private String dir;
@@ -21,13 +21,6 @@ public class PropFile {
     public PropFile(String fileName) {
         dir = DEFAULT_DIR;
         this.fileName = fileName;
-        this.properties = new Properties();
-        reload();
-    }
-
-    public PropFile() {
-        dir = DEFAULT_DIR;
-        this.fileName = DEFAULT_FILE_NAME;
         this.properties = new Properties();
         reload();
     }

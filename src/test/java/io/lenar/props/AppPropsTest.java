@@ -1,6 +1,5 @@
 package io.lenar.props;
 
-import io.lenar.props.AppProps;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
