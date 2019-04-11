@@ -30,4 +30,20 @@ public class AppPropsTest {
         assertEquals(System.getProperty("user.home"), appProp.value("user.home"));
     }
 
+    @Test
+    public void refreshEnvPropertyWhenKeepFreshEnabled() {
+        System.setProperty("testProperty", "Test Property Value");
+        AppProps appProps = new AppProps(true);
+        System.setProperty("testProperty", "New Test Property Value");
+        assertEquals("New Test Property Value", appProps.value("testProperty"));
+    }
+
+    @Test
+    public void refreshEnvPropertyWhenKeepFreshDisabled() {
+        System.setProperty("testProperty", "Test Property Value");
+        AppProps appProps = new AppProps(false);
+        System.setProperty("testProperty", "New Test Property Value");
+        assertEquals("Test Property Value", appProps.value("testProperty"));
+    }
+
 }

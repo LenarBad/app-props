@@ -11,17 +11,15 @@ public class PropFile {
 
     private static final Logger log = LoggerFactory.getLogger(PropFile.class);
 
-
     private static final String DEFAULT_DIR = System.getProperty("user.home");
 
     private String dir;
     private String fileName;
-    private Properties properties;
+    private Properties properties = new Properties();
 
     public PropFile(String fileName) {
         dir = DEFAULT_DIR;
         this.fileName = fileName;
-        this.properties = new Properties();
         reload();
     }
 
@@ -31,7 +29,9 @@ public class PropFile {
 
     public void reload() {
         try (FileInputStream inputStream = new FileInputStream(new File(dir, fileName))) {
-            this.properties.load(inputStream);
+            Properties newProps = new Properties();
+            newProps.load(inputStream);
+            this.properties = newProps;
         } catch (IOException ex) {
             log.warn("Failed to load property file: {dir : {}, fileName: {}}", this.dir, this.fileName);
         }
