@@ -20,7 +20,7 @@ public class PropFileTest {
 
         propFile.reload();
 
-        assertEquals(1, propFile.properties().entrySet().size());
+        assertEquals(propFile.properties().entrySet().size(), 1);
     }
 
 }
