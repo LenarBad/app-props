@@ -45,7 +45,7 @@
     <scm>
         <connection>scm:git:git@github.com:lenarbad/app-props.git</connection>
         <developerConnection>scm:git:git@github.com:lenarbad/app-props.git</developerConnection>
-        <url>https://github.com/lenarbad/easylog</url>
+        <url>https://github.com/lenarbad/app-props</url>
     </scm>
 
     <developers>
