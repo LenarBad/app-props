@@ -1,36 +1,36 @@
 package io.lenar.props;
 
-import io.lenar.props.file.AbstractPropFile;
-import io.lenar.props.file.UserPropFile;
+import io.lenar.props.file.File;
+import io.lenar.props.file.UserFile;
 
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-public class NewAppProps {
+public class AppProps {
 
     private static final String DEFAULT_FILE_NAME = "app-props.properties";
 
-    private Set<AbstractPropFile> files;
+    private Set<File> files;
 
     private Properties properties;
 
     private boolean keepPropsFresh;
 
-    public NewAppProps() {
+    public AppProps() {
         this(false);
         reload();
     }
 
-    public NewAppProps(boolean keepPropsFresh) {
+    public AppProps(boolean keepPropsFresh) {
         this.keepPropsFresh = keepPropsFresh;
         this.files = new HashSet<>();
         userPropFile(DEFAULT_FILE_NAME);
         reload();
     }
 
-    public NewAppProps userPropFile(String fileName) {
-        files.add(new UserPropFile(fileName, keepPropsFresh));
+    public AppProps userPropFile(String fileName) {
+        files.add(new UserFile(fileName, keepPropsFresh));
         return this;
     }
 
@@ -50,7 +50,7 @@ public class NewAppProps {
 
     private void reload() {
         Properties newProps = new Properties();
-        for (AbstractPropFile file : files) {
+        for (File file : files) {
             newProps.putAll(file.properties());
         }
         newProps.putAll(System.getProperties());

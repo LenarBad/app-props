@@ -5,35 +5,35 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
-public class NewAppPropsTest {
+public class AppPropsTest {
 
     @Test
     public void noExceptionsOnNonExistingFilesTest() {
-        new NewAppProps().userPropFile("non-existing-file.properties");
+        new AppProps().userPropFile("non-existing-file.properties");
     }
 
     @Test
     public void shouldReturnNullForNonExistingPropertyTest() {
-        NewAppProps appProps = new NewAppProps();
+        AppProps appProps = new AppProps();
         assertNull(appProps.value("nonexistingprop"));
     }
 
     @Test
     public void shouldApplyDefaultIfUsedForNonExistingPropertyTest() {
-        NewAppProps appProps = new NewAppProps();
+        AppProps appProps = new AppProps();
         assertEquals(appProps.value("nonexistingprop", "default value"), "default value");
     }
 
     @Test
     public void envVariablesTest() {
-        NewAppProps appProp = new NewAppProps();
+        AppProps appProp = new AppProps();
         assertEquals(appProp.value("user.home"), System.getProperty("user.home"));
     }
 
     @Test
     public void refreshEnvPropertyWhenKeepFreshEnabled() {
         System.setProperty("testProperty", "Test Property Value");
-        NewAppProps appProps = new NewAppProps(true);
+        AppProps appProps = new AppProps(true);
         System.setProperty("testProperty", "New Test Property Value");
         assertEquals(appProps.value("testProperty"), "New Test Property Value");
     }
@@ -41,7 +41,7 @@ public class NewAppPropsTest {
     @Test
     public void refreshEnvPropertyWhenKeepFreshDisabled() {
         System.setProperty("testProperty", "Test Property Value");
-        NewAppProps appProps = new NewAppProps(false);
+        AppProps appProps = new AppProps(false);
         System.setProperty("testProperty", "New Test Property Value");
         assertEquals(appProps.value("testProperty"), "Test Property Value");
     }
