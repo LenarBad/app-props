@@ -1,56 +1,46 @@
 package io.lenar.props;
 
-import io.lenar.props.file.PropFile;
+import io.lenar.props.file.File;
+import io.lenar.props.file.UserFile;
 
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 public class AppProps {
 
     private static final String DEFAULT_FILE_NAME = "app-props.properties";
 
-    private boolean keepPropsFresh = false;
-
-    private PropFile file;
+    private Set<File> files;
 
     private Properties properties;
 
+
     public AppProps() {
-        this(DEFAULT_FILE_NAME);
+        this.files = new HashSet<>();
+        userPropFile(DEFAULT_FILE_NAME);
+        reload();
     }
 
-    public AppProps(boolean keepPropsFresh) {
-        this(DEFAULT_FILE_NAME);
-        this.keepPropsFresh = keepPropsFresh;
-    }
-
-    public AppProps(String fileName) {
-        this.file = new PropFile(fileName);
-        this.properties = this.file.properties();
-        properties.putAll(System.getProperties());
-    }
-
-    public AppProps(String fileName, boolean keepPropsFresh) {
-        this(fileName);
-        this.keepPropsFresh = keepPropsFresh;
+    public AppProps userPropFile(String fileName) {
+        files.add(new UserFile(fileName));
+        reload();
+        return this;
     }
 
     public String value(String key) {
-        if (keepPropsFresh) {
-            reload();
-        }
         return properties.getProperty(key);
     }
 
     public String value(String key, String defaultValue) {
-        if (keepPropsFresh) {
-            reload();
-        }
         return properties.getProperty(key, defaultValue);
     }
 
-    private void reload() {
-        this.file.reload();
-        Properties newProps = this.file.properties();
+    public void reload() {
+        Properties newProps = new Properties();
+        for (File file : files) {
+            newProps.putAll(file.properties());
+        }
         newProps.putAll(System.getProperties());
         this.properties = newProps;
     }

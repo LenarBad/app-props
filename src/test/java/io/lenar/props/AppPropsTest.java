@@ -9,7 +9,7 @@ public class AppPropsTest {
 
     @Test
     public void noExceptionsOnNonExistingFilesTest() {
-        new AppProps("non-existing-file.properties");
+        new AppProps().userPropFile("non-existing-file.properties");
     }
 
     @Test
@@ -31,19 +31,20 @@ public class AppPropsTest {
     }
 
     @Test
-    public void refreshEnvPropertyWhenKeepFreshEnabled() {
+    public void changeEnvPropertyWithoutReloadTest() {
         System.setProperty("testProperty", "Test Property Value");
-        AppProps appProps = new AppProps(true);
+        AppProps appProps = new AppProps();
         System.setProperty("testProperty", "New Test Property Value");
-        assertEquals(appProps.value("testProperty"), "New Test Property Value");
+        assertEquals(appProps.value("testProperty"), "Test Property Value");
     }
 
     @Test
-    public void refreshEnvPropertyWhenKeepFreshDisabled() {
+    public void changeEnvPropertyAndReloadTest() {
         System.setProperty("testProperty", "Test Property Value");
-        AppProps appProps = new AppProps(false);
+        AppProps appProps = new AppProps();
         System.setProperty("testProperty", "New Test Property Value");
-        assertEquals(appProps.value("testProperty"), "Test Property Value");
+        appProps.reload();
+        assertEquals(appProps.value("testProperty"), "New Test Property Value");
     }
 
 }
