@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import static java.io.File.pathSeparatorChar;
+
 public class UserFile extends File {
 
     private static final Logger log = LoggerFactory.getLogger(UserFile.class);
@@ -17,19 +19,12 @@ public class UserFile extends File {
 
     public UserFile(String fileName) {
         super(fileName);
-        this.absolutePath = DEFAULT_DIR + fileName;
-        load();
-    }
-
-    public UserFile(String fileName, boolean refreshEnabled) {
-        super(fileName, refreshEnabled);
-        this.absolutePath = DEFAULT_DIR + fileName;
+        this.absolutePath = DEFAULT_DIR + pathSeparatorChar + fileName;
         load();
     }
 
     @Override
     public Properties properties() {
-        refreshIfEnabled();
         Properties newProps = new Properties();
         newProps.putAll(this.properties);
         return newProps;
@@ -43,12 +38,6 @@ public class UserFile extends File {
         } catch (IOException ex) {
             log.warn("Failed to load property file: {dir : {}, fileName: {}}", DEFAULT_DIR, this.fileName);
             this.properties = new Properties();
-        }
-    }
-
-    private void refreshIfEnabled() {
-        if (this.refreshEnabled) {
-            load();
         }
     }
 

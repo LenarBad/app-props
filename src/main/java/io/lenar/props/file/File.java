@@ -4,18 +4,12 @@ import java.util.Properties;
 
 public abstract class File {
 
-    protected String fileName;
-    protected boolean refreshEnabled;
+    protected final String fileName;
 
     protected String absolutePath;
 
-    public File(String fileName, boolean refreshEnabled) {
-        this.fileName = fileName;
-        this.refreshEnabled = refreshEnabled;
-    }
-
     public File(String fileName) {
-        this(fileName, false);
+        this.fileName = fileName;
     }
 
     public abstract Properties properties();
