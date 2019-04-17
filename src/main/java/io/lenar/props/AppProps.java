@@ -31,6 +31,7 @@ public class AppProps {
 
     public AppProps userPropFile(String fileName) {
         files.add(new UserFile(fileName, keepPropsFresh));
+        reload();
         return this;
     }
 
