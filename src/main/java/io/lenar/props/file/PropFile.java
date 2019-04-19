@@ -38,13 +38,11 @@ public class PropFile {
     private static final Logger log = LoggerFactory.getLogger(PropFile.class);
     private static final String USER_HOME_DIR = System.getProperty("user.home");
 
-    private final String fileName;
     private final File file;
 
     private Properties properties;
 
     public PropFile(String fileName) {
-        this.fileName = fileName;
         this.file = getFile(fileName);
         load();
     }
