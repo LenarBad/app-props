@@ -9,7 +9,7 @@ public class AppPropsTest {
 
     @Test
     public void noExceptionsOnNonExistingFilesTest() {
-        new AppProps().userPropFile("non-existing-file.properties");
+        new AppProps().propFile("non-existing-file.properties");
     }
 
     @Test
