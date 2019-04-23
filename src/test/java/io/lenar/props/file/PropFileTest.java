@@ -42,4 +42,10 @@ public class PropFileTest {
         propFile.properties().setProperty("newProp", "newPropValue");
         assertTrue(propFile.properties().isEmpty());
     }
+
+    @Test
+    public void resourcesPropFileTest() {
+        PropFile propFile = new PropFile("test-resources-prop-file.properties");
+        assertEquals(propFile.properties().getProperty("some-test-prop-in-test-resources-prop-file"), "testValue");
+    }
 }
