@@ -70,4 +70,10 @@ public class AppPropsTest {
         assertEquals(appProps.value("testProperty"), "New Test Property Value");
     }
 
+    @Test
+    public void resourcesPropFileTest() {
+        AppProps appProps = new AppProps();
+        appProps.propFile("test-resources-prop-file.properties");
+        assertEquals(appProps.value("some-test-prop-in-test-resources-prop-file"), "testValue");
+    }
 }
