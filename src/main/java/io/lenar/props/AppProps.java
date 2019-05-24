@@ -23,23 +23,62 @@
  */
 package io.lenar.props;
 
-import io.lenar.props.file.PropFile;
+import io.lenar.files.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.*;
 
 public class AppProps {
 
-    private List<PropFile> propFiles;
+    private static final Logger log = LoggerFactory.getLogger(AppProps.class);
+
+    private boolean autoReload;
+
+    private List<Resource> propertyFiles;
 
     private Properties properties;
 
     public AppProps() {
-        this.propFiles = new ArrayList<>();
-        reload();
+        this(true);
     }
 
-    public AppProps propFile(String fileName) {
-        propFiles.add(new PropFile(fileName));
+    public AppProps(boolean autoReload) {
+        this.propertyFiles = new ArrayList<>();
+        this.properties = new Properties();
+        this.autoReload = autoReload;
+        if (this.autoReload) {
+            reload();
+        }
+    }
+
+    public AppProps homeDirPropFile(String fileName) {
+        propertyFiles.add(new UserHomeFile(fileName));
+        if (this.autoReload) {
+            reload();
+        }
+        return this;
+    }
+
+    public AppProps resourcePropFile(String fileName) {
+        propertyFiles.add(new ResourceFile(fileName));
+        if (this.autoReload) {
+            reload();
+        }
+        return this;
+    }
+
+    public AppProps fileSystemPropFile(String fileName) {
+        propertyFiles.add(new UserFile(fileName));
+        if (this.autoReload) {
+            reload();
+        }
+        return this;
+    }
+
+    public AppProps networkPropResource(String url) {
+        propertyFiles.add(new NetworkResource(url));
         reload();
         return this;
     }
@@ -54,8 +93,13 @@ public class AppProps {
 
     public void reload() {
         Properties newProps = new Properties();
-        for (PropFile propertyFile : propFiles) {
-            newProps.putAll(propertyFile.properties());
+        for (Resource file : propertyFiles) {
+            try {
+                newProps.putAll(file.properties());
+            } catch (IOException e) {
+                log.warn("Couldn't find properties file... {}");
+                e.printStackTrace();
+            }
         }
         newProps.putAll(System.getProperties());
         this.properties = newProps;
