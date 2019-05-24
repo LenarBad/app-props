@@ -31,8 +31,18 @@ import static org.testng.Assert.assertNull;
 public class AppPropsTest {
 
     @Test
-    public void noExceptionsOnNonExistingFilesTest() {
-        new AppProps().propFile("non-existing-file.properties");
+    public void noExceptionsOnNonExistingResourceFileTest() {
+        new AppProps().resourcePropFile("non-existing-file.properties");
+    }
+
+    @Test
+    public void noExceptionsOnNonExistingFileSystemFileTest() {
+        new AppProps().fileSystemPropFile("non-existing-file.properties");
+    }
+
+    @Test
+    public void noExceptionsOnNonExistingHomeDirFileTest() {
+        new AppProps().homeDirPropFile("non-existing-file.properties");
     }
 
     @Test
@@ -73,7 +83,14 @@ public class AppPropsTest {
     @Test
     public void resourcesPropFileTest() {
         AppProps appProps = new AppProps();
-        appProps.propFile("test-resources-prop-file.properties");
+        appProps.resourcePropFile("test-resources-prop-file.properties");
         assertEquals(appProps.value("some-test-prop-in-test-resources-prop-file"), "testValue");
+    }
+
+    @Test
+    public void resourcesPropFileWithoutAutoReloadTest() {
+        AppProps appProps = new AppProps(false);
+        appProps.resourcePropFile("test-resources-prop-file.properties");
+        assertNull(appProps.value("some-test-prop-in-test-resources-prop-file"));
     }
 }
