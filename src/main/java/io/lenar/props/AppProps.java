@@ -95,12 +95,14 @@ public class AppProps {
         Properties newProps = new Properties();
         for (Resource file : propertyFiles) {
             try {
-                newProps.putAll(file.properties());
+                if (file != null) {
+                    newProps.putAll(file.properties());
+                }
             } catch (IOException e) {
-                log.warn("Couldn't find properties file... {}");
-                e.printStackTrace();
+                log.warn("Couldn't read properties file... {}", e.getMessage());
             }
         }
+        newProps.putAll(System.getenv());
         newProps.putAll(System.getProperties());
         this.properties = newProps;
     }

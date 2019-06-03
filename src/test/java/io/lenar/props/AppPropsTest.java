@@ -25,8 +25,7 @@ package io.lenar.props;
 
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+import static org.testng.Assert.*;
 
 public class AppPropsTest {
 
@@ -42,7 +41,9 @@ public class AppPropsTest {
 
     @Test
     public void noExceptionsOnNonExistingHomeDirFileTest() {
-        new AppProps().homeDirPropFile("non-existing-file.properties");
+        AppProps appProps = new AppProps();
+        appProps.homeDirPropFile("non-existing-file.properties");
+        assertNotNull(appProps.value("user.home"));
     }
 
     @Test
