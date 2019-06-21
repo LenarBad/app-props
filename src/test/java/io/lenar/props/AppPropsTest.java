@@ -66,19 +66,19 @@ public class AppPropsTest {
 
     @Test
     public void changeEnvPropertyWithoutReloadTest() {
-        System.setProperty("testProperty", "Test Property Value");
+        System.setProperty("testProperty", "Test Value Value");
         AppProps appProps = new AppProps();
-        System.setProperty("testProperty", "New Test Property Value");
-        assertEquals(appProps.value("testProperty"), "Test Property Value");
+        System.setProperty("testProperty", "New Test Value Value");
+        assertEquals(appProps.value("testProperty"), "Test Value Value");
     }
 
     @Test
     public void changeEnvPropertyAndReloadTest() {
-        System.setProperty("testProperty", "Test Property Value");
+        System.setProperty("testProperty", "Test Value Value");
         AppProps appProps = new AppProps();
-        System.setProperty("testProperty", "New Test Property Value");
+        System.setProperty("testProperty", "New Test Value Value");
         appProps.reload();
-        assertEquals(appProps.value("testProperty"), "New Test Property Value");
+        assertEquals(appProps.value("testProperty"), "New Test Value Value");
     }
 
     @Test
