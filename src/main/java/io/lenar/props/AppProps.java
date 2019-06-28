@@ -34,76 +34,75 @@ public class AppProps {
 
     private static final Logger log = LoggerFactory.getLogger(AppProps.class);
 
-    private boolean autoReload;
-
-    private List<Resource> propertyFiles;
-
-    private Properties properties;
+    private Map<String, Object> propMap;
 
     public AppProps() {
-        this(true);
+        this.propMap = new HashMap<>();
+        reloadEnvironment();
     }
 
-    public AppProps(boolean autoReload) {
-        this.propertyFiles = new ArrayList<>();
-        this.properties = new Properties();
-        this.autoReload = autoReload;
-        if (this.autoReload) {
-            reload();
-        }
-    }
-
-    public AppProps homeDirPropFile(String fileName) {
-        propertyFiles.add(new UserHomeFile(fileName));
-        if (this.autoReload) {
-            reload();
-        }
+     public AppProps addProperties(Resource file) throws IOException {
+        file.properties().entrySet().stream().forEach(entry -> {
+            propMap.put(entry.getKey().toString(), entry.getValue().toString());
+        });
+         reloadEnvironment();
         return this;
     }
 
-    public AppProps resourcePropFile(String fileName) {
-        propertyFiles.add(new ResourceFile(fileName));
-        if (this.autoReload) {
-            reload();
+    public AppProps addPropertiesOptional(Resource file) {
+        try {
+            file.properties().entrySet().stream().forEach(entry -> {
+                propMap.put(entry.getKey().toString(), entry.getValue().toString());
+            });
+        } catch (IOException ex) {
+            log.warn(ex.getMessage());
         }
+        reloadEnvironment();
         return this;
     }
 
-    public AppProps fileSystemPropFile(String fileName) {
-        propertyFiles.add(new UserFile(fileName));
-        if (this.autoReload) {
-            reload();
-        }
+    public AppProps addJsonProperty(Resource file, String name, Class clazz) throws IOException {
+        propMap.put(name, file.fromJson(clazz));
+        reloadEnvironment();
         return this;
     }
 
-    public AppProps networkPropResource(String url) {
-        propertyFiles.add(new NetworkResource(url));
-        reload();
+    public <T> AppProps addJsonPropertyAsList(Resource file, String name,  Class<T[]> clazz) throws IOException {
+        propMap.put(name, file.fromJsonAsList(clazz));
+        reloadEnvironment();
         return this;
+    }
+
+    public <T> List<T> valueAsListOf(String key, Class<T[]> clazz) {
+        return (List<T>) propMap.get(key) ;
+    }
+
+    public Object valueObject(String key) {
+        return propMap.get(key);
+    }
+
+    public <T> T valueAs(String key, Class<T> clazz) {
+        return (T) propMap.get(key);
     }
 
     public String value(String key) {
-        return properties.getProperty(key);
+        return propMap.containsKey(key) ? propMap.get(key).toString() : null;
     }
 
     public String value(String key, String defaultValue) {
-        return properties.getProperty(key, defaultValue);
+        return propMap.getOrDefault(key, defaultValue).toString();
     }
 
-    public void reload() {
-        Properties newProps = new Properties();
-        for (Resource file : propertyFiles) {
-            try {
-                if (file != null) {
-                    newProps.putAll(file.properties());
-                }
-            } catch (IOException e) {
-                log.warn("Couldn't read properties file... {}", e.getMessage());
-            }
+    public void reloadEnvironment() {
+        propMap.putAll(System.getenv());
+        propMap.putAll(propertiesToMap(System.getProperties()));
+    }
+
+    private Map<String, String> propertiesToMap(Properties properties) {
+        Map<String, String> map = new HashMap<>();
+        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+            map.put(entry.getKey().toString(), entry.getValue().toString());
         }
-        newProps.putAll(System.getenv());
-        newProps.putAll(System.getProperties());
-        this.properties = newProps;
+        return map;
     }
 }

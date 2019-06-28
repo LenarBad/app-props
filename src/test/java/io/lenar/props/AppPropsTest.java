@@ -23,27 +23,51 @@
  */
 package io.lenar.props;
 
+import io.lenar.files.ResourceFile;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
+import java.util.List;
 
 import static org.testng.Assert.*;
 
 public class AppPropsTest {
 
     @Test
-    public void noExceptionsOnNonExistingResourceFileTest() {
-        new AppProps().resourcePropFile("non-existing-file.properties");
+    public void simpleJsonPropFileValueObjectTest() throws IOException {
+        AppProps props = new AppProps()
+                .addJsonProperty(new ResourceFile("json-props.json"), "testObject", TestObject.class);
+        TestObject testObject = (TestObject) props.valueObject("testObject");
+        assertEquals(testObject.getValue(), "value 1");
     }
 
     @Test
-    public void noExceptionsOnNonExistingFileSystemFileTest() {
-        new AppProps().fileSystemPropFile("non-existing-file.properties");
+    public void simpleJsonPropFileTestValueAsTest() throws IOException {
+        AppProps props = new AppProps()
+                .addJsonProperty(new ResourceFile("json-props.json"), "testObject", TestObject.class);
+        TestObject testObject = props.valueAs("testObject", TestObject.class);
+        assertEquals(testObject.getValue(), "value 1");
     }
 
     @Test
-    public void noExceptionsOnNonExistingHomeDirFileTest() {
-        AppProps appProps = new AppProps();
-        appProps.homeDirPropFile("non-existing-file.properties");
-        assertNotNull(appProps.value("user.home"));
+    public void jsonPropFileTestvalueAsListOfTest() throws IOException {
+        AppProps props = new AppProps()
+                .addJsonPropertyAsList(new ResourceFile("json-props-as-list.json"), "testObjects", TestObject[].class);
+        List<TestObject> testObjects = props.valueAsListOf("testObjects", TestObject[].class);
+        assertNotNull(testObjects);
+        assertEquals(testObjects.size(), 2);
+        assertEquals(testObjects.get(0).getValue(), "value 1");
+        assertEquals(testObjects.get(1).getValue(), "value 2");
+    }
+
+    @Test
+    public void nonExistingFileAddPropertiesOptionalTest() {
+        new AppProps().addPropertiesOptional(new ResourceFile("non-existing-file.properties"));
+    }
+
+    @Test(expectedExceptions = {IOException.class})
+    public void nonExistingFilePropertiesTest() throws IOException {
+        new AppProps().addProperties(new ResourceFile("non-existing-file.properties"));
     }
 
     @Test
@@ -53,9 +77,16 @@ public class AppPropsTest {
     }
 
     @Test
-    public void shouldApplyDefaultIfUsedForNonExistingPropertyTest() {
+    public void shouldApplyDefaultValueIfUsedForNonExistingPropertyTest() {
         AppProps appProps = new AppProps();
         assertEquals(appProps.value("nonexistingprop", "default value"), "default value");
+    }
+
+    @Test
+    public void resourcesPropFileTest() throws IOException {
+        AppProps appProps = new AppProps();
+        appProps.addProperties(new ResourceFile("test-resources-prop-file.properties"));
+        assertEquals(appProps.value("some-test-prop-in-test-resources-prop-file"), "testValue");
     }
 
     @Test
@@ -65,33 +96,20 @@ public class AppPropsTest {
     }
 
     @Test
-    public void changeEnvPropertyWithoutReloadTest() {
+    public void reloadEnvironmentTest() {
         System.setProperty("testProperty", "Test Value Value");
         AppProps appProps = new AppProps();
         System.setProperty("testProperty", "New Test Value Value");
-        assertEquals(appProps.value("testProperty"), "Test Value Value");
-    }
-
-    @Test
-    public void changeEnvPropertyAndReloadTest() {
-        System.setProperty("testProperty", "Test Value Value");
-        AppProps appProps = new AppProps();
-        System.setProperty("testProperty", "New Test Value Value");
-        appProps.reload();
+        appProps.reloadEnvironment();
         assertEquals(appProps.value("testProperty"), "New Test Value Value");
     }
 
     @Test
-    public void resourcesPropFileTest() {
-        AppProps appProps = new AppProps();
-        appProps.resourcePropFile("test-resources-prop-file.properties");
-        assertEquals(appProps.value("some-test-prop-in-test-resources-prop-file"), "testValue");
+    public void filesShouldntOvewriteEnvPropsTest() throws IOException {
+        System.setProperty("try-to-override-env", "Env Prop Value");
+        AppProps appProp = new AppProps();
+        appProp.addProperties(new ResourceFile("test-resources-prop-file.properties"));
+        assertEquals(appProp.value("try-to-override-env"), "Env Prop Value");
     }
 
-    @Test
-    public void resourcesPropFileWithoutAutoReloadTest() {
-        AppProps appProps = new AppProps(false);
-        appProps.resourcePropFile("test-resources-prop-file.properties");
-        assertNull(appProps.value("some-test-prop-in-test-resources-prop-file"));
-    }
 }
