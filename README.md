@@ -28,11 +28,11 @@ To add a config file to your ```appProp``` you need pass a ```Resource file;``` 
 **Examples**   
    
 ```java
-    AppProps appProps = new AppProps()
-                           .addProperties(new UserHomeFile("my-test.properties"))
-                           .addProperties(new ResourceFile("my-app.properties"))
-                           .addJsonProperty(new ResourceFile("test-users.json"), "testUser", User.class)
-                           .addJsonPropertyAsList(new ResourceFile("test-cards.json"), "testCards", Card[].class);
+AppProps appProps = new AppProps()
+                        .addProperties(new UserHomeFile("my-test.properties"))
+                        .addProperties(new ResourceFile("my-app.properties"))
+                        .addJsonProperty(new ResourceFile("test-users.json"), "testUser", User.class)
+                        .addJsonPropertyAsList(new ResourceFile("test-cards.json"), "testCards", Card[].class);
 ```   
 
 All environmental variables will be added automatically.   
@@ -41,9 +41,9 @@ All configs will be read in the order that they were added to ```AppProps```.
 **How to access to property values**
 
 ```java
-    String dbPassword = appProps.value("password");
-    User testUser = appProp.valueAs("testUser", User.class);
-    List<Card> testCards = appProps.valueAsListOf("testCards", Card[].class);
+String dbPassword = appProps.value("password");
+User testUser = appProp.valueAs("testUser", User.class);
+List<Card> testCards = appProps.valueAsListOf("testCards", Card[].class);
 ```
 
 
