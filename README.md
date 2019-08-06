@@ -41,7 +41,7 @@ AppProps appProps = new AppProps()
 All environmental variables will be added automatically.   
 All configs will be read in the order that they were added to ```AppProps```. 
 
-**How to access to property values**
+**How to access property values**
 
 ```java
 String dbPassword = appProps.value("password");
