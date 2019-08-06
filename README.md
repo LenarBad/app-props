@@ -1,5 +1,6 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.lenar/app-props.svg)](https://maven-badges.herokuapp.com/maven-central/io.lenar/app-props)
 ![Build Status](https://travis-ci.com/LenarBad/app-props.svg?branch=master)
+[![Hits-of-Code](https://hitsofcode.com/github/lenarbad/app-props)](https://hitsofcode.com/view/github/lenarbad/app-props)
 
 # AppProps
 The library for handling the application properties that are stored externally or/and internally in the project or/and set as environment variables
