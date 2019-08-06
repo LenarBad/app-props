@@ -41,17 +41,17 @@ public class AppProps {
         reloadEnvironment();
     }
 
-     public AppProps addProperties(Source file) throws IOException {
-        file.properties().entrySet().stream().forEach(entry -> {
+     public AppProps addProperties(Source source) throws IOException {
+        source.properties().entrySet().stream().forEach(entry -> {
             propMap.put(entry.getKey().toString(), entry.getValue().toString());
         });
          reloadEnvironment();
         return this;
     }
 
-    public AppProps addPropertiesOptional(Source file) {
+    public AppProps addPropertiesOptional(Source source) {
         try {
-            file.properties().entrySet().stream().forEach(entry -> {
+            source.properties().entrySet().stream().forEach(entry -> {
                 propMap.put(entry.getKey().toString(), entry.getValue().toString());
             });
         } catch (IOException ex) {
@@ -61,14 +61,14 @@ public class AppProps {
         return this;
     }
 
-    public AppProps addJsonProperty(Source file, String name, Class clazz) throws IOException {
-        propMap.put(name, file.fromJson(clazz));
+    public AppProps addJsonProperty(Source source, String name, Class clazz) throws IOException {
+        propMap.put(name, source.fromJson(clazz));
         reloadEnvironment();
         return this;
     }
 
-    public <T> AppProps addJsonPropertyAsList(Source file, String name,  Class<T[]> clazz) throws IOException {
-        propMap.put(name, file.fromJsonAsList(clazz));
+    public <T> AppProps addJsonPropertyAsList(Source source, String name,  Class<T[]> clazz) throws IOException {
+        propMap.put(name, source.fromJsonAsList(clazz));
         reloadEnvironment();
         return this;
     }
