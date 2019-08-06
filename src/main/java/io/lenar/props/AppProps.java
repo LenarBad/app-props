@@ -73,6 +73,18 @@ public class AppProps {
         return this;
     }
 
+    public AppProps addYamlProperty(Source source, String name, Class clazz) throws IOException {
+        propMap.put(name, source.fromYaml(clazz));
+        reloadEnvironment();
+        return this;
+    }
+
+    public <T> AppProps addYamlPropertyAsList(Source source, String name,  Class<T> clazz) throws IOException {
+        propMap.put(name, source.fromYamlAsList(clazz));
+        reloadEnvironment();
+        return this;
+    }
+
     public <T> List<T> valueAsListOf(String key, Class<T[]> clazz) {
         return (List<T>) propMap.get(key) ;
     }
