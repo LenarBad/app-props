@@ -41,7 +41,7 @@ public class AppProps {
         reloadEnvironment();
     }
 
-     public AppProps addProperties(Resource file) throws IOException {
+     public AppProps addProperties(Source file) throws IOException {
         file.properties().entrySet().stream().forEach(entry -> {
             propMap.put(entry.getKey().toString(), entry.getValue().toString());
         });
@@ -49,7 +49,7 @@ public class AppProps {
         return this;
     }
 
-    public AppProps addPropertiesOptional(Resource file) {
+    public AppProps addPropertiesOptional(Source file) {
         try {
             file.properties().entrySet().stream().forEach(entry -> {
                 propMap.put(entry.getKey().toString(), entry.getValue().toString());
@@ -61,13 +61,13 @@ public class AppProps {
         return this;
     }
 
-    public AppProps addJsonProperty(Resource file, String name, Class clazz) throws IOException {
+    public AppProps addJsonProperty(Source file, String name, Class clazz) throws IOException {
         propMap.put(name, file.fromJson(clazz));
         reloadEnvironment();
         return this;
     }
 
-    public <T> AppProps addJsonPropertyAsList(Resource file, String name,  Class<T[]> clazz) throws IOException {
+    public <T> AppProps addJsonPropertyAsList(Source file, String name,  Class<T[]> clazz) throws IOException {
         propMap.put(name, file.fromJsonAsList(clazz));
         reloadEnvironment();
         return this;

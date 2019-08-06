@@ -24,9 +24,9 @@ The library for handling the application properties that are stored externally o
 **How to add configs**
 
 To add a config file to your ```appProp``` you need pass a ```Resource file;``` with one of methods
-   - ```addProperties(Resource file)```
-   - ```addJsonProperty(Resource file, String name, Class clazz)```
-   - ```addJsonPropertyAsList(Resource file, String name,  Class<T[]> clazz)```
+   - ```addProperties(Source file)```
+   - ```addJsonProperty(Source file, String name, Class clazz)```
+   - ```addJsonPropertyAsList(Source file, String name,  Class<T[]> clazz)```
 
 **Examples**   
    
