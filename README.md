@@ -35,7 +35,9 @@ AppProps appProps = new AppProps()
                         .addProperties(new UserHomeFile("my-test.properties"))
                         .addProperties(new ResourceFile("my-app.properties"))
                         .addJsonProperty(new ResourceFile("test-users.json"), "testUser", User.class)
-                        .addJsonPropertyAsList(new ResourceFile("test-cards.json"), "testCards", Card[].class);
+                        .addJsonPropertyAsList(new ResourceFile("test-cards.json"), "testCards", Card[].class)
+                        .addYamlProperty(new ResourceFile("test-address.yml"), "shippingAddress", ShippingAddress.class)
+                        .addYamlPropertyAsList(new ResourceFile("test-order-lines.yml"), "orderLines", OrderLine.class);
 ```   
 
 All environmental variables will be added automatically.   
@@ -46,9 +48,31 @@ All configs will be read in the order that they were added to ```AppProps```.
 ```java
 String dbPassword = appProps.value("password");
 User testUser = appProp.valueAs("testUser", User.class);
+ShippingAddress shippingAddress = appProp.valueAs("shippingAddress", ShippingAddress.class);
 List<Card> testCards = appProps.valueAsListOf("testCards", Card[].class);
+List<OrderLine> orderLines = appProps.valueAsListOf("orderLines", OrderLine[].class);
 ```
 
+**List of objects YAML example**
 
+```java
+public class TestObject {
 
+    private String value;
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+}
+```
+
+```yaml
+"value": "value 1"
+---
+"value": "value 2"
+```
 

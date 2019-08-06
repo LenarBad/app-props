@@ -42,6 +42,14 @@ public class AppPropsTest {
     }
 
     @Test
+    public void simpleYamlPropFileValueObjectTest() throws IOException {
+        AppProps props = new AppProps()
+                .addYamlProperty(new ResourceFile("yaml-props.yml"), "testObject", TestObject.class);
+        TestObject testObject = (TestObject) props.valueObject("testObject");
+        assertEquals(testObject.getValue(), "value 1");
+    }
+
+    @Test
     public void simpleJsonPropFileTestValueAsTest() throws IOException {
         AppProps props = new AppProps()
                 .addJsonProperty(new ResourceFile("json-props.json"), "testObject", TestObject.class);
@@ -50,9 +58,28 @@ public class AppPropsTest {
     }
 
     @Test
+    public void simpleYamlPropFileTestValueAsTest() throws IOException {
+        AppProps props = new AppProps()
+                .addYamlProperty(new ResourceFile("yaml-props.yml"), "testObject", TestObject.class);
+        TestObject testObject = props.valueAs("testObject", TestObject.class);
+        assertEquals(testObject.getValue(), "value 1");
+    }
+
+    @Test
     public void jsonPropFileTestvalueAsListOfTest() throws IOException {
         AppProps props = new AppProps()
                 .addJsonPropertyAsList(new ResourceFile("json-props-as-list.json"), "testObjects", TestObject[].class);
+        List<TestObject> testObjects = props.valueAsListOf("testObjects", TestObject[].class);
+        assertNotNull(testObjects);
+        assertEquals(testObjects.size(), 2);
+        assertEquals(testObjects.get(0).getValue(), "value 1");
+        assertEquals(testObjects.get(1).getValue(), "value 2");
+    }
+
+    @Test
+    public void yamlPropFileTestvalueAsListOfTest() throws IOException {
+        AppProps props = new AppProps()
+                .addYamlPropertyAsList(new ResourceFile("yaml-props-as-list.yml"), "testObjects", TestObject.class);
         List<TestObject> testObjects = props.valueAsListOf("testObjects", TestObject[].class);
         assertNotNull(testObjects);
         assertEquals(testObjects.size(), 2);
