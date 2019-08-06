@@ -48,7 +48,7 @@ All configs will be read in the order that they were added to ```AppProps```.
 ```java
 String dbPassword = appProps.value("password");
 User testUser = appProp.valueAs("testUser", User.class);
-ShippingAddress shippingAddress = appProp.valueAs("shippingAddress", ShippingAddress.class);
+ShippingAddress shippingAddress = (ShippingAddress) appProp.valueObject("shippingAddress", ShippingAddress.class);
 List<Card> testCards = appProps.valueAsListOf("testCards", Card[].class);
 List<OrderLine> orderLines = appProps.valueAsListOf("orderLines", OrderLine[].class);
 ```
