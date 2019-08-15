@@ -24,15 +24,11 @@
 package io.lenar.props;
 
 import io.lenar.files.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
 
 public class AppProps {
-
-    private static final Logger log = LoggerFactory.getLogger(AppProps.class);
 
     private Map<String, Object> propMap;
 
@@ -53,11 +49,11 @@ public class AppProps {
         try {
             source.properties().entrySet().stream().forEach(entry -> {
                 propMap.put(entry.getKey().toString(), entry.getValue().toString());
+                reloadEnvironment();
             });
         } catch (IOException ex) {
-            log.warn(ex.getMessage());
+            // Do nothing since it's optional
         }
-        reloadEnvironment();
         return this;
     }
 
